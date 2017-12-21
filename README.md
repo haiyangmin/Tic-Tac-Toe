@@ -5,8 +5,14 @@ Tic Tac Toe Javascript
 <head>
  <meta charset="UTF-8">
  <title>Tic Tac Toe</title>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
  <style>
+ body {
+	background-color: #E0E4CC;
+	font-family: 'Montserrat', sans-serif;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
 td {
   border:  4px solid black;
   height:  100px;
@@ -18,11 +24,17 @@ td {
   cursor: pointer;
 }
 
+td:hover {
+	cursor: pointer;
+	background-color: #FA6900;
+}
+
 table {
   border-collapse: collapse;
   position:   absolute;
   left: 50%;
-  margin: auto;
+  margin-left: -155px;
+  margin-top: 50px;
   top: 50px;
 }
 
@@ -68,12 +80,13 @@ table tr td:last-child {
 <script>
 
 const cells = document.querySelectorAll('.cell');
+let huturn=[0,2,4,6,8];
+let Aiturn=[1,3,5,7];
 let turn=0;
 let mode=1;
-let arr;
+let state;
 
-
-function checkwin(board, player)
+function checkwin()
 {
   if ((cells[0].innerText=="X" && cells[1].innerText=="X" && cells[2].innerText=="X") || 
   (cells[3].innerText=="X" && cells[4].innerText=="X" && cells[5].innerText=="X") || (cells[6].innerText=="X" && cells[7].innerText=="X" && cells[8].innerText=="X") || (cells[0].innerText=="X" && cells[4].innerText=="X" && cells[8].innerText=="X") || (cells[2].innerText=="X" && cells[4].innerText=="X" && cells[6].innerText=="X") ||
@@ -111,10 +124,10 @@ function checklose()
 
 startGame();
 
-function startGame() 
-{
+function startGame() {
 
 arr=[0,1,2,3,4,5,6,7,8];
+turn= 0;
 
 for (let i = 0; i < cells.length; i++)
 { 
@@ -123,35 +136,51 @@ for (let i = 0; i < cells.length; i++)
 	}
 }
 
-function handler(event)
-{
-if (typeof arr[event.target.id] ==='number' && turn == 0 )
-{
-arr[event.target.id] = "X";
-this.innerText ="X";
-this.removeEventListener('click', handler,false);
-turn = 1;
-checkwin();
-checklose();
-checkTie();
-}
-while (turn==1)
-{
-Ai();
-}
+function handler(event) {
+
+if (typeof arr[event.target.id] ==='number' && ( turn==0 || turn == 2 || turn == 4 || turn == 6 || turn == 8))
+  {
+  arr[event.target.id] = "X";
+  this.innerText ="X";
+  this.removeEventListener('click', handler,false);
+  turn++;
+  checkTie();
+   }
+if (turn == 1 || turn == 3 || turn == 5 || turn == 7 ){
+     checkwin();
+   Ai();
+  }
 }
 
 function Ai() {
-  let best=bestSpot();
-  arr[best] = "O";
-  document.getElementById(best).innerHTML = "O"
-  document.getElementById(best).removeEventListener('click', handler,false);
-  turn=0;
-  checkTie();
+  if     (typeof arr[4] ==='number' && turn == 1)
+        {
+        cells[4].innerText="O";
+        arr[4] = "O";
+       cells[4].removeEventListener('click', handler,false);
+         turn++;
+         }  
+   else if ( typeof arr[4] !=='number' && turn == 1)
+       {
+          cells[5].innerText="O";
+          arr[5]= "O";
+          turn++;
+           cells[5].removeEventListener('click', handler,false);
+       }
+for (let i=0; i < arr.length; i++) {
+  if (typeof arr[i] ==='number' && (turn == 3 || turn == 5 || turn == 7) )
+     {
+   cells[i].innerText="O";
+   arr[i] = "O";
+  cells[i].removeEventListener('click', handler,false);
+  turn++;
+  checklose();
+       }
+     }
 }
 
-function emptycells( arr) {
-  return arr.filter((element, i) => i===element);
+function emptycells() {
+  return arr.filter((elm, i) => i===elm);
 }
 
 function checkTie() 
