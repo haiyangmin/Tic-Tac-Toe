@@ -1,0 +1,88 @@
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>Tic Tac Toe</title>
+ <style>
+ body {
+	background-color: #E0E4CC;
+	font-family: 'Montserrat', sans-serif;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+td {
+  border:  4px solid black;
+  height:  100px;
+  width:  100px;
+  text-align:  center;
+  vertical-align:  middle;
+  font-family:   "Times New Roman", Times, serif;
+  font-size:  70px;
+  cursor: pointer;
+}
+
+td:hover {
+	cursor: pointer;
+	background-color: #FA6900;
+}
+
+table {
+  border-collapse: collapse;
+  position:   absolute;
+  left: 50%;
+  margin-left: -155px;
+  margin-top: 50px;
+  top: 90px;
+}
+
+table tr:first-child td {
+  border-top: 0;
+}
+
+table tr:last-child td {
+  border-bottom: 0;
+}
+
+table tr td:first-child {
+  border-left: 0;
+}
+table tr td:last-child {
+  border-right: 0;
+}
+
+div {
+  padding-top: 20px;
+    height: 50px;
+	font-size: 20px;
+     font-family: "Times New Roman", Times, serif;
+    color: red;
+}
+</style>
+ </head>
+ 
+<body>
+<div class="endgame">
+		<div class="text"></div>
+</div>
+
+<table>
+		<tr>
+			<td class="cell" id="0"></td>
+			<td class="cell" id="1"></td>
+			<td class="cell" id="2"></td>
+		</tr>
+		<tr>
+			<td class="cell" id="3"></td>
+			<td class="cell" id="4"></td>
+			<td class="cell" id="5"></td>
+		</tr>
+		<tr>
+			<td class="cell" id="6"></td>
+			<td class="cell" id="7"></td>
+			<td class="cell" id="8"></td>
+		</tr>
+</table>
+<p id="demo"></p>
+<button onClick="startGame()">Replay</button>
+</body>
+</html>
