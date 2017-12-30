@@ -85,6 +85,7 @@ div {
 			<td class="cell" id="8"></td>
 		</tr>
 </table>
+<p id="demo"></p>
 <button onClick="startGame()">Replay</button>
 
 <script>
