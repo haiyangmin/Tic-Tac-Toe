@@ -19,7 +19,7 @@ td {
   width:  100px;
   text-align:  center;
   vertical-align:  middle;
-  font-family:  "Comic Sans MS", cursive, sans-serif;
+  font-family:   "Times New Roman", Times, serif;
   font-size:  70px;
   cursor: pointer;
 }
@@ -35,7 +35,7 @@ table {
   left: 50%;
   margin-left: -155px;
   margin-top: 50px;
-  top: 50px;
+  top: 90px;
 }
 
 table tr:first-child td {
@@ -53,10 +53,21 @@ table tr td:last-child {
   border-right: 0;
 }
 
+div {
+  padding-top: 20px;
+    height: 50px;
+	font-size: 20px;
+     font-family: "Times New Roman", Times, serif;
+    color: red;
+}
 </style>
  </head>
  
 <body>
+<div class="endgame">
+		<div class="text"></div>
+</div>
+
 <table>
 		<tr>
 			<td class="cell" id="0"></td>
@@ -74,28 +85,24 @@ table tr td:last-child {
 			<td class="cell" id="8"></td>
 		</tr>
 </table>
-<p id="demo"></p>
 <button onClick="startGame()">Replay</button>
 
 <script>
 
 const cells = document.querySelectorAll('.cell');
-let huturn=[0,2,4,6,8];
-let Aiturn=[1,3,5,7];
+const huPlayer = 'X';
+const aiPlayer = 'O';
 let turn=0;
-let mode=1;
-let state;
+let arr=[];
 
-function checkwin()
+function checkwin(newBoard)
 {
-  if ((cells[0].innerText=="X" && cells[1].innerText=="X" && cells[2].innerText=="X") || 
-  (cells[3].innerText=="X" && cells[4].innerText=="X" && cells[5].innerText=="X") || (cells[6].innerText=="X" && cells[7].innerText=="X" && cells[8].innerText=="X") || (cells[0].innerText=="X" && cells[4].innerText=="X" && cells[8].innerText=="X") || (cells[2].innerText=="X" && cells[4].innerText=="X" && cells[6].innerText=="X") ||
-(cells[0].innerText=="X" && cells[3].innerText=="X" && cells[6].innerText=="X") ||
-(cells[1].innerText=="X" && cells[4].innerText=="X" && cells[7].innerText=="X") ||
-(cells[2].innerText=="X" && cells[5].innerText=="X" && cells[8].innerText=="X"))  
+  if ((newBoard[0]=="X" && newBoard[1]=="X" && newBoard[2]=="X") || 
+  (newBoard[3]=="X" && newBoard[4]=="X" && newBoard[5]=="X") || (newBoard[6]=="X" && newBoard[7]=="X" && newBoard[8]=="X") || (newBoard[0]=="X" && newBoard[4]=="X" && newBoard[8]=="X") || (newBoard[2]=="X" && newBoard[4]=="X" && newBoard[6]=="X") ||
+(newBoard[0]=="X" && newBoard[3]=="X" && newBoard[6]=="X") ||
+(newBoard[1]=="X" && newBoard[4]=="X" && newBoard[7]=="X") ||
+(newBoard[2]=="X" && newBoard[5]=="X" && newBoard[8]=="X"))  
   { 
-    alert ("you win");
-    startGame();
     return true;
   }
   else {
@@ -103,16 +110,14 @@ function checkwin()
   }
 }
 
-function checklose()
+function checklose(newBoard)
 {
-  if ((cells[0].innerText=="O" && cells[1].innerText=="O" && cells[2].innerText=="O") || 
-  (cells[3].innerText=="O" && cells[4].innerText=="O" && cells[5].innerText=="O") || (cells[6].innerText=="O" && cells[7].innerText=="O" && cells[8].innerText=="O") || (cells[0].innerText=="O" && cells[4].innerText=="O" && cells[8].innerText=="O") || (cells[2].innerText=="O" && cells[4].innerText=="O" && cells[6].innerText=="O") ||
-(cells[0].innerText=="O" && cells[3].innerText=="O" && cells[6].innerText=="O") ||
-(cells[1].innerText=="O" && cells[4].innerText=="O" && cells[7].innerText=="O") ||
-(cells[2].innerText=="O" && cells[5].innerText=="O" && cells[8].innerText=="O"))  
+  if ((newBoard[0]=="O" && newBoard[1]=="O" && newBoard[2]=="O") || 
+  (newBoard[3]=="O" && newBoard[4]=="O" && newBoard[5]=="O") || (newBoard[6]=="O" && newBoard[7]=="O" && newBoard[8]=="O") || (newBoard[0]=="O" && newBoard[4]=="O" && newBoard[8]=="O") || (arr[2]=="O" && newBoard[4]=="O" && newBoard[6]=="O") ||
+(newBoard[0]=="O" && newBoard[3]=="O" && newBoard[6]=="O") ||
+(newBoard[1]=="O" && newBoard[4]=="O" && newBoard[7]=="O") ||
+(newBoard[2]=="O" && newBoard[5]=="O" && newBoard[8]=="O"))  
   { 
-    alert ("You lose");
-    startGame();
     return true;
   }
   else 
@@ -121,6 +126,17 @@ function checklose()
   }
 }
 
+function emptycells(newBoard) {
+  return newBoard.filter((elm, i) => i===elm);
+}
+
+function checkTie(newBoard) 
+{
+  if (emptycells(newBoard).length === 0)
+  {
+  return true;
+  } 
+}
 
 startGame();
 
@@ -128,6 +144,7 @@ function startGame() {
 
 arr=[0,1,2,3,4,5,6,7,8];
 turn= 0;
+document.querySelector(".endgame").style.display = "none";
 
 for (let i = 0; i < cells.length; i++)
 { 
@@ -140,56 +157,98 @@ function handler(event) {
 
 if (typeof arr[event.target.id] ==='number' && ( turn==0 || turn == 2 || turn == 4 || turn == 6 || turn == 8))
   {
-  arr[event.target.id] = "X";
-  this.innerText ="X";
+  arr[event.target.id] = huPlayer;
+  this.innerText = huPlayer;
   this.removeEventListener('click', handler,false);
   turn++;
-  checkTie();
-   }
-if (turn == 1 || turn == 3 || turn == 5 || turn == 7 ){
-     checkwin();
-   Ai();
+      }
+delcareWinner(arr);      
+if (turn==1 || turn == 3 || turn == 5 || turn == 7) {
+  Ai();
+    }
   }
-}
 
 function Ai() {
-  if     (typeof arr[4] ==='number' && turn == 1)
-        {
-        cells[4].innerText="O";
-        arr[4] = "O";
-       cells[4].removeEventListener('click', handler,false);
-         turn++;
-         }  
-   else if ( typeof arr[4] !=='number' && turn == 1)
-       {
-          cells[5].innerText="O";
-          arr[5]= "O";
-          turn++;
-           cells[5].removeEventListener('click', handler,false);
-       }
-for (let i=0; i < arr.length; i++) {
-  if (typeof arr[i] ==='number' && (turn == 3 || turn == 5 || turn == 7) )
-     {
-   cells[i].innerText="O";
-   arr[i] = "O";
-  cells[i].removeEventListener('click', handler,false);
+  let a= bestSpot();
+   cells[a].innerText= aiPlayer;
+   arr[a] = aiPlayer;
+  cells[a].removeEventListener('click', handler,false);
   turn++;
-  checklose();
-       }
-     }
+  delcareWinner(arr);
 }
 
-function emptycells() {
-  return arr.filter((elm, i) => i===elm);
+function minimax(newBoard, player) {
+	var availSpots = emptycells(newBoard);
+
+	if (checkwin(newBoard)) {
+		return {score: -10};
+	} else if (checklose(newBoard)) {
+		return {score: 10};
+	} else if (availSpots.length === 0) {
+		return {score: 0};
+	}
+	var moves = [];
+	for (var i = 0; i < availSpots.length; i++) {
+		var move = {};
+		move.index = newBoard[availSpots[i]];
+		newBoard[availSpots[i]] = player;
+
+		if (player == aiPlayer) {
+			var result = minimax(newBoard, huPlayer);
+			move.score = result.score;
+		} else {
+			var result = minimax(newBoard, aiPlayer);
+			move.score = result.score;
+		}
+
+		newBoard[availSpots[i]] = move.index;
+
+		moves.push(move);
+	}
+
+	var bestMove;
+	if(player === aiPlayer) {
+		var bestScore = -10000;
+		for(var i = 0; i < moves.length; i++) {
+			if (moves[i].score > bestScore) {
+				bestScore = moves[i].score;
+				bestMove = i;
+			}
+		}
+	} else {
+		var bestScore = 10000;
+		for(var i = 0; i < moves.length; i++) {
+			if (moves[i].score < bestScore) {
+				bestScore = moves[i].score;
+				bestMove = i;
+			}
+		}
+	}
+
+	return moves[bestMove];
 }
 
-function checkTie() 
-{
-  if (emptycells().length === 0)
-  {
-  alert ("It's a tie");
-  startGame();
-  } 
+function bestSpot() {
+	return minimax(arr, aiPlayer).index;
+}
+
+function delcareWinner(newBoard){
+let availSpots = emptycells(newBoard);
+if (checkwin(newBoard)){
+document.querySelector(".endgame").style.display = "block";
+document.querySelector(".endgame .text").innerText = "You Win";
+}
+else if (checklose(newBoard)){
+document.querySelector(".endgame").style.display = "block";
+document.querySelector(".endgame .text").innerText = "You Lose";
+for (let i = 0; i < availSpots.length; i++){
+cells[availSpots[i]].removeEventListener('click', handler,false);
+}
+}
+else if (availSpots.length === 0){
+document.querySelector(".endgame").style.display = "block";
+document.querySelector(".endgame .text").innerText = "It's a Tie";
+}
 }
 
 </script>
