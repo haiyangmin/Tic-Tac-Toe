@@ -50,7 +50,9 @@ function checkTie(newBoard)
 }
 
 startGame();
+
 function startGame() {
+
 arr=[0,1,2,3,4,5,6,7,8];
 turn= 0;
 document.querySelector(".endgame").style.display = "none";
@@ -61,7 +63,9 @@ for (let i = 0; i < cells.length; i++)
  cells[i].addEventListener('click', handler, false);
 	}
 }
+
 function handler(event) {
+
 if (typeof arr[event.target.id] ==='number' && ( turn==0 || turn == 2 || turn == 4 || turn == 6 || turn == 8))
   {
   arr[event.target.id] = huPlayer;
@@ -74,6 +78,7 @@ if (turn==1 || turn == 3 || turn == 5 || turn == 7) {
   Ai();
     }
   }
+
 function Ai() {
   let a= bestSpot();
    cells[a].innerText= aiPlayer;
@@ -106,9 +111,12 @@ function minimax(newBoard, player) {
 			var result = minimax(newBoard, aiPlayer);
 			move.score = result.score;
 		}
+
 		newBoard[availSpots[i]] = move.index;
+
 		moves.push(move);
 	}
+
 	var bestMove;
 	if(player === aiPlayer) {
 		var bestScore = -10000;
@@ -130,6 +138,7 @@ function minimax(newBoard, player) {
 
 	return moves[bestMove];
 }
+
 function bestSpot() {
 	return minimax(arr, aiPlayer).index;
 }
